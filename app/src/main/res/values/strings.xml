@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MonTra</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="do_not_have_account">Don’t have an account yet?</string>
+    <string name="email_not_valid">Email is not valid</string>
+    <string name="password_not_valid">Password must have at least %d characters</string>
+    <string name="name">Name</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="email_empty_error">Email cannot be empty</string>
+    <string name="password_empty_error">Password cannot be empty</string>
+    <string name="name_empty_error">Name cannot be empty</string>
+</resources>
