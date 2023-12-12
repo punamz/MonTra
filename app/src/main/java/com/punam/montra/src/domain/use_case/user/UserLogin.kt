@@ -1,19 +1,21 @@
 package com.punam.montra.src.domain.use_case.user
 
+import com.punam.montra.src.domain.model.LoginResponse
 import com.punam.montra.src.domain.repository.UserRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.punam.montra.util.ViewState
 
 class UserLogin(
     private val repository: UserRepository,
 ) {
 
-    operator fun invoke(
+    suspend operator fun invoke(
         email: String,
         password: String,
-    ): Flow<Boolean> {
-        return repository.login(email = email, password = password).map {
-            true
-        }
+    ): ViewState<LoginResponse> {
+        val res = repository.login(email = email, password = password)
+        return res.fold(
+            { ViewState.Error(it) },
+            { ViewState.Success(it) }
+        )
     }
 }

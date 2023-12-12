@@ -1,7 +1,8 @@
 package com.punam.montra.src.domain.repository
 
-import kotlinx.coroutines.flow.Flow
+import arrow.core.Either
+import com.punam.montra.src.domain.model.LoginResponse
 
 interface UserRepository {
-    fun login(email: String, password: String): Flow<Boolean>
+    suspend fun login(email: String, password: String): Either<String, LoginResponse>
 }

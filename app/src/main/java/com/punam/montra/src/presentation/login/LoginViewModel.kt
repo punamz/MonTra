@@ -1,14 +1,17 @@
 package com.punam.montra.src.presentation.login
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.punam.montra.R
 import com.punam.montra.src.data.local_data.DataStoreDatabase
+import com.punam.montra.src.domain.model.LoginResponse
 import com.punam.montra.src.domain.use_case.user.UserUseCase
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.UiText
+import com.punam.montra.util.ViewState
 import com.punam.montra.util.isEmail
 import com.punam.montra.util.isPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -89,11 +92,14 @@ class LoginViewModel @Inject constructor(
 
     private fun handleLogin(): Boolean {
         viewModelScope.launch {
-            val result: Boolean = userUseCase.userLogin(
+            val result = userUseCase.userLogin(
                 email = _state.value.emailInput,
                 password = _state.value.passwordInput
-            ).first()
+            )
+
+
+            Log.i("Nam nè", "handleLogin: $result")
         }
-        return true
+        return false
     }
 }

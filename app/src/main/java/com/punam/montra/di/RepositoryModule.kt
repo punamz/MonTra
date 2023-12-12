@@ -1,5 +1,6 @@
 package com.punam.montra.di
 
+import com.punam.montra.src.data.remote.AuthenticationApi
 import com.punam.montra.src.data.repository.UserRepositoryImpl
 import com.punam.montra.src.domain.repository.UserRepository
 import dagger.Module
@@ -13,7 +14,9 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideUserRepository(): UserRepository {
-        return UserRepositoryImpl()
+    fun provideUserRepository(authenticationApi: AuthenticationApi): UserRepository {
+        return UserRepositoryImpl(
+             api = authenticationApi
+        )
     }
 }
