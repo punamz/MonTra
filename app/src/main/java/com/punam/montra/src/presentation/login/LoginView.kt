@@ -21,9 +21,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -37,7 +44,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.punam.montra.R
 import com.punam.montra.src.presentation.component.CustomTextField
+import com.punam.montra.src.presentation.component.Loading
 import com.punam.montra.util.Routers
+import com.punam.montra.util.ViewState
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -49,11 +59,43 @@ fun LoginView(
     val focusManager = LocalFocusManager.current
     val state = viewModel.state.value
     val context = LocalContext.current
+
+    val snackBarHostState = remember { SnackbarHostState() }
+    var isLoading by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(key1 = true) {
+        viewModel.viewState.collectLatest { event ->
+            when (event) {
+                ViewState.Loading -> isLoading = true
+                ViewState.NoContent -> TODO()
+                is ViewState.Error -> {
+                    isLoading = false
+                    snackBarHostState.showSnackbar(
+                        event.message
+                    )
+                }
+
+                is ViewState.Success -> {
+                    isLoading = false
+                    navController.navigate(Routers.Home.name) {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                }
+            }
+        }
+    }
+
+
     Scaffold(
         modifier = Modifier.pointerInput(Unit) {
             detectTapGestures { focusManager.clearFocus() }
         },
-    ) {
+        snackbarHost = { SnackbarHost(snackBarHostState) },
+
+        ) {
+        if (isLoading) Loading()
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
@@ -102,10 +144,7 @@ fun LoginView(
             )
             Button(
                 onClick = {
-                    val result = viewModel.onEvent(LoginEvent.Login)
-                    if (result is Boolean && result) navController.navigate(Routers.Home.name) {
-                        popUpTo(navController.graph.id){inclusive = true}
-                    }
+                    viewModel.onEvent(LoginEvent.Login)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

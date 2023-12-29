@@ -19,8 +19,9 @@ class UserRepositoryImpl(
             api.login(request = req)
         } catch (ex: Exception) {
             Log.d("Nam nè", "login: $ex")
-            return Either.Left("")
+            return Either.Left("Error call api")
         }
-        return Either.Right(res.data)
+        return if (res.code == 0) Either.Right(res.data) else Either.Left(res.message)
+
     }
 }

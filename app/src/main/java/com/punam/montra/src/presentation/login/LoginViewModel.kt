@@ -15,7 +15,8 @@ import com.punam.montra.util.ViewState
 import com.punam.montra.util.isEmail
 import com.punam.montra.util.isPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,12 +29,15 @@ class LoginViewModel @Inject constructor(
     private val _state = mutableStateOf(LoginState())
     val state: State<LoginState> = _state
 
-    fun onEvent(event: LoginEvent): Any {
-        return when (event) {
+    private val _viewState = MutableSharedFlow<ViewState<LoginResponse>>()
+    val viewState = _viewState.asSharedFlow()
+
+    fun onEvent(event: LoginEvent) {
+        when (event) {
             is LoginEvent.ToggleShowPassword -> toggleShowPassword()
             is LoginEvent.InputEmail -> updateEmailInput(event.value)
             is LoginEvent.InputPassword -> updatePasswordInput(event.value)
-            is LoginEvent.Login -> return login()
+            is LoginEvent.Login -> login()
         }
     }
 
@@ -55,10 +59,10 @@ class LoginViewModel @Inject constructor(
         _state.value = _state.value.copy(isHidePassword = !_state.value.isHidePassword)
     }
 
-    private fun login(): Boolean {
+    private fun login() {
         val isValidValue = validateValue()
-        if (!isValidValue) return false
-        return handleLogin()
+        if (!isValidValue) return
+        handleLogin()
     }
 
 
@@ -90,16 +94,16 @@ class LoginViewModel @Inject constructor(
         return null
     }
 
-    private fun handleLogin(): Boolean {
+    private fun handleLogin() {
         viewModelScope.launch {
+            _viewState.emit(ViewState.Loading)
             val result = userUseCase.userLogin(
                 email = _state.value.emailInput,
                 password = _state.value.passwordInput
             )
-
-
             Log.i("Nam nè", "handleLogin: $result")
+            _viewState.emit(result)
         }
-        return false
     }
+
 }
