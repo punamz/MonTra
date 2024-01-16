@@ -1,4 +1,4 @@
-package com.punam.montra.src.domain.model
+package com.punam.montra.src.domain.model.request
 
 data class LoginRequest(
     val email: String,

@@ -46,7 +46,9 @@ import com.punam.montra.R
 import com.punam.montra.src.presentation.component.CustomTextField
 import com.punam.montra.src.presentation.component.Loading
 import com.punam.montra.util.Routers
+import com.punam.montra.util.UiText
 import com.punam.montra.util.ViewState
+import com.punam.montra.util.toStringRes
 import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -68,20 +70,23 @@ fun LoginView(
         viewModel.viewState.collectLatest { event ->
             when (event) {
                 ViewState.Loading -> isLoading = true
-                ViewState.NoContent -> TODO()
                 is ViewState.Error -> {
                     isLoading = false
                     snackBarHostState.showSnackbar(
-                        event.message
+                        UiText.StringResource(event.error.errorCode.toStringRes())
+                            .asString(context)
                     )
                 }
 
                 is ViewState.Success -> {
+                    viewModel.saveLocalData(event.value)
                     isLoading = false
                     navController.navigate(Routers.Home.name) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
                 }
+
+                else -> isLoading = false
             }
         }
     }
@@ -144,6 +149,7 @@ fun LoginView(
             )
             Button(
                 onClick = {
+                    focusManager.clearFocus()
                     viewModel.onEvent(LoginEvent.Login)
                 },
                 modifier = Modifier

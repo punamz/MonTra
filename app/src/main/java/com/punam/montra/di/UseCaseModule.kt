@@ -2,6 +2,7 @@ package com.punam.montra.di
 
 import com.punam.montra.src.domain.repository.UserRepository
 import com.punam.montra.src.domain.use_case.user.UserLogin
+import com.punam.montra.src.domain.use_case.user.UserSignUp
 import com.punam.montra.src.domain.use_case.user.UserUseCase
 import dagger.Module
 import dagger.Provides
@@ -16,7 +17,8 @@ object UseCaseModule {
     @Singleton
     fun provideUserUseCases(repository: UserRepository): UserUseCase {
         return UserUseCase(
-            userLogin = UserLogin(repository)
+            userLogin = UserLogin(repository),
+            userSignUp = UserSignUp(repository),
         )
     }
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.punam.montra.src.data.local_data.DataStoreDatabase
 import com.punam.montra.src.data.local_data.PreferencesKey
-import com.punam.montra.util.OnboardContent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

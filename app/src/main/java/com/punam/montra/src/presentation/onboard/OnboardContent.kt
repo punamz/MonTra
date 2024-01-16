@@ -1,4 +1,4 @@
-package com.punam.montra.util
+package com.punam.montra.src.presentation.onboard
 
 import androidx.annotation.DrawableRes
 import com.punam.montra.R

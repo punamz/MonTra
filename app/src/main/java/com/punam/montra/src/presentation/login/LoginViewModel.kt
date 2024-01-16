@@ -1,13 +1,13 @@
 package com.punam.montra.src.presentation.login
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.punam.montra.R
 import com.punam.montra.src.data.local_data.DataStoreDatabase
-import com.punam.montra.src.domain.model.LoginResponse
+import com.punam.montra.src.data.local_data.PreferencesKey
+import com.punam.montra.src.domain.model.response.LoginResponse
 import com.punam.montra.src.domain.use_case.user.UserUseCase
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.UiText
@@ -101,9 +101,14 @@ class LoginViewModel @Inject constructor(
                 email = _state.value.emailInput,
                 password = _state.value.passwordInput
             )
-            Log.i("Nam nè", "handleLogin: $result")
             _viewState.emit(result)
         }
     }
 
+    suspend fun saveLocalData(data: LoginResponse) {
+        storeDatabase.saveValue(PreferencesKey.userToken, data.token ?: "")
+        storeDatabase.saveValue(PreferencesKey.userId, data.user?.id ?: "")
+        storeDatabase.saveValue(PreferencesKey.userEmail, data.user?.email ?: "")
+        storeDatabase.saveValue(PreferencesKey.userName, data.user?.fullName ?: "")
+    }
 }

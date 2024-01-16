@@ -15,11 +15,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.punam.montra.util.OnboardContent
+import com.punam.montra.src.presentation.onboard.OnboardContent
 
 @Composable
 fun OnboardBody(
-    content: OnboardContent
+    content: OnboardContent,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,

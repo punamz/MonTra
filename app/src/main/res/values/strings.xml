@@ -1,4 +1,9 @@
 <resources>
+    <string name="err0000">Error call api</string>
+    <string name="err0001">Server error</string>
+    <string name="err0002">Parameter does not valid</string>
+    <string name="err1001">Email or password incorrect</string>
+    <string name="err1002">User not found</string>
     <string name="app_name">MonTra</string>
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>

@@ -26,7 +26,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit() : Retrofit {
+    fun provideRetrofit(): Retrofit {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
@@ -34,13 +34,13 @@ object AppModule {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
-            .baseUrl("http://restapi.adequateshop.com/api/")
+            .baseUrl("http://ec2-18-141-196-188.ap-southeast-1.compute.amazonaws.com/")
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideAuthenticationApi(retrofit: Retrofit ) : AuthenticationApi {
+    fun provideAuthenticationApi(retrofit: Retrofit): AuthenticationApi {
         return retrofit
             .create(AuthenticationApi::class.java)
     }

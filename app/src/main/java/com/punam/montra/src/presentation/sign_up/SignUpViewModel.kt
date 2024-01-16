@@ -3,19 +3,34 @@ package com.punam.montra.src.presentation.sign_up
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.punam.montra.R
+import com.punam.montra.src.data.local_data.DataStoreDatabase
+import com.punam.montra.src.data.local_data.PreferencesKey
+import com.punam.montra.src.domain.model.response.SignUpResponse
+import com.punam.montra.src.domain.use_case.user.UserUseCase
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.UiText
+import com.punam.montra.util.ViewState
 import com.punam.montra.util.isEmail
 import com.punam.montra.util.isPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel() {
+class SignUpViewModel @Inject constructor(
+    private val storeDatabase: DataStoreDatabase,
+    private val userUseCase: UserUseCase,
+) : ViewModel() {
 
     private val _state = mutableStateOf(SignUpState())
     val state: MutableState<SignUpState> = _state
+
+    private val _viewState = MutableSharedFlow<ViewState<SignUpResponse>>()
+    val viewState = _viewState.asSharedFlow()
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
@@ -59,7 +74,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun signUp() {
-        val isValid = validateValue();
+        val isValid = validateValue()
         if (!isValid) return
         handleSignUp()
     }
@@ -101,6 +116,21 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun handleSignUp() {
-        // todo: handle sign up here
+        viewModelScope.launch {
+            _viewState.emit(ViewState.Loading)
+            val result = userUseCase.userSignUp(
+                email = _state.value.emailInput,
+                password = _state.value.passwordInput,
+                fullName = _state.value.nameInput,
+            )
+            _viewState.emit(result)
+        }
+    }
+
+    suspend fun saveLocalData(data: SignUpResponse) {
+        storeDatabase.saveValue(PreferencesKey.userToken, data.token ?: "")
+        storeDatabase.saveValue(PreferencesKey.userId, data.user?.id ?: "")
+        storeDatabase.saveValue(PreferencesKey.userEmail, data.user?.email ?: "")
+        storeDatabase.saveValue(PreferencesKey.userName, data.user?.fullName ?: "")
     }
 }

@@ -1,5 +1,7 @@
 package com.punam.montra.util
 
+import androidx.annotation.StringRes
+import com.punam.montra.R
 
 /**
  * validate input String is email format
@@ -21,4 +23,15 @@ fun CharSequence.beauty(): String {
  */
 fun CharSequence.isPassword(): Boolean {
     return this.length >= AppConstant.MIN_PASSWORD_LENGTH
+}
+
+@StringRes
+fun CharSequence?.toStringRes(): Int {
+    return when (this) {
+        "err0001" -> R.string.err0001
+        "err0002" -> R.string.err0002
+        "err1001" -> R.string.err1001
+        "err1002" -> R.string.err1002
+        else -> R.string.err0000
+    }
 }
