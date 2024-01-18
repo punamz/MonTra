@@ -5,5 +5,9 @@ sealed class Routers(val name: String) {
     data object Onboard : Routers("onboard")
     data object Login : Routers("login")
     data object SignUp : Routers("sign_up")
+    data object Landing : Routers("landing")
     data object Home : Routers("home")
+    data object Transaction : Routers("transaction")
+    data object Budget : Routers("budget")
+    data object Profile : Routers("profile")
 }

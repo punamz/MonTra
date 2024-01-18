@@ -1,4 +1,4 @@
-package com.punam.montra.src.presentation.home
+package com.punam.montra.src.presentation.budget
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,8 +13,8 @@ import androidx.navigation.NavController
 import com.punam.montra.R
 
 @Composable
-fun HomeView(
-    viewModel: HomeViewModel = hiltViewModel(),
+fun BudgetView(
+    viewModel: BudgetViewModel = hiltViewModel(),
     navController: NavController,
 ) {
     Box(
@@ -22,11 +22,8 @@ fun HomeView(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = stringResource(id = R.string.home),
+            text = stringResource(   id = R.string.budget  ),
             style = MaterialTheme.typography.displayMedium,
         )
     }
-
 }
-
-

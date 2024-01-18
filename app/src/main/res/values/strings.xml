@@ -22,4 +22,8 @@
     <string name="email_empty_error">Email cannot be empty</string>
     <string name="password_empty_error">Password cannot be empty</string>
     <string name="name_empty_error">Name cannot be empty</string>
+    <string name="home">Home</string>
+    <string name="transaction">Transaction</string>
+    <string name="budget">Budget</string>
+    <string name="profile">Profile</string>
 </resources>

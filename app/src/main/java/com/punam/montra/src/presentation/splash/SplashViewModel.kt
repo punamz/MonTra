@@ -38,7 +38,7 @@ class SplashViewModel @Inject constructor(
                     default = ""
                 ).first()
                 _startDestination.value =
-                    if (isLoggedIn.isNotEmpty()) Routers.Home.name else Routers.Login.name
+                    if (isLoggedIn.isNotEmpty()) Routers.Landing.name else Routers.Login.name
             }
             _isLoading.value = false
         }
