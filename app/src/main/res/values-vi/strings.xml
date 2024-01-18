@@ -5,6 +5,10 @@
     <string name="err0002">Parameter does not valid</string>
     <string name="err1001">Email hoặc mật khẩu không đúng</string>
     <string name="err1002">Không tìm thấy thông tin người dùng</string>
+    <string name="err1003">Địa chỉ email không hợp lệ</string>
+    <string name="err1004">Mật khẩu không hợp lệ</string>
+    <string name="err1005">Tên không hợp lệ</string>
+    <string name="err1006">Địa chỉ email đã được sử dụng</string>
     <string name="sign_up">Đăng kí</string>
     <string name="login">Đăng nhập</string>
     <string name="app_name">MonTra</string>
