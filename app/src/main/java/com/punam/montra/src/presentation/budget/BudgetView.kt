@@ -22,7 +22,7 @@ fun BudgetView(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = stringResource(   id = R.string.budget  ),
+            text = stringResource(id = R.string.budget),
             style = MaterialTheme.typography.displayMedium,
         )
     }
