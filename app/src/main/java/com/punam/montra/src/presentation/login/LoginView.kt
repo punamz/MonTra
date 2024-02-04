@@ -44,7 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.punam.montra.R
 import com.punam.montra.src.presentation.component.CustomTextField
-import com.punam.montra.src.presentation.component.Loading
+import com.punam.montra.src.presentation.component.LoadingDialog
 import com.punam.montra.util.Routers
 import com.punam.montra.util.UiText
 import com.punam.montra.util.ViewState
@@ -99,7 +99,7 @@ fun LoginView(
         snackbarHost = { SnackbarHost(snackBarHostState) },
 
         ) {
-        if (isLoading) Loading()
+        if (isLoading) LoadingDialog()
 
         Column(
             modifier = Modifier.fillMaxSize(),

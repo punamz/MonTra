@@ -19,8 +19,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.punam.montra.R
 
 @Composable
-fun Loading() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+fun LoadingDialog() {
     Dialog(
         onDismissRequest = { },
         DialogProperties(
@@ -34,11 +33,16 @@ fun Loading() {
                 .size(100.dp)
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
         ) {
-            LottieAnimation(
-                composition,
-                iterations = LottieConstants.IterateForever,
-            )
+            Loading()
         }
-
     }
+}
+
+@Composable
+fun Loading() {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+    LottieAnimation(
+        composition,
+        iterations = LottieConstants.IterateForever,
+    )
 }

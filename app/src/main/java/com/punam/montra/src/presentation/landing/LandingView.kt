@@ -31,20 +31,16 @@ fun LandingView(
     val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val screens = listOf(
-
         LandingBottomItem.Home,
         LandingBottomItem.Transaction,
-        LandingBottomItem.Budget, LandingBottomItem.Profile,
-
-
-        )
+        LandingBottomItem.Budget,
+        LandingBottomItem.Profile,
+    )
     Scaffold(
         bottomBar = {
             NavigationBar {
-
                 screens.forEach { screen ->
                     NavigationBarItem(
-
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route.name } == true,
                         label = {
                             Text(stringResource(id = screen.label))
