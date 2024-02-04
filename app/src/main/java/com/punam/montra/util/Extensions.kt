@@ -32,6 +32,10 @@ fun CharSequence?.toStringRes(): Int {
         "err0002" -> R.string.err0002
         "err1001" -> R.string.err1001
         "err1002" -> R.string.err1002
+        "err1003" -> R.string.err1003
+        "err1004" -> R.string.err1004
+        "err1005" -> R.string.err1005
+        "err1006" -> R.string.err1006
         else -> R.string.err0000
     }
 }

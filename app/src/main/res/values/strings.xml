@@ -4,6 +4,10 @@
     <string name="err0002">Parameter does not valid</string>
     <string name="err1001">Email or password incorrect</string>
     <string name="err1002">User not found</string>
+    <string name="err1003">Email does not valid</string>
+    <string name="err1004">Password does not valid</string>
+    <string name="err1005">Name does not valid</string>
+    <string name="err1006">Email address was used</string>
     <string name="app_name">MonTra</string>
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>
