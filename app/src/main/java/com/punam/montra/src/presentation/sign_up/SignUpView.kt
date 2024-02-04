@@ -87,7 +87,7 @@ fun SignUpView(
                 is ViewState.Success -> {
                     viewModel.saveLocalData(event.value)
                     isLoading = false
-                    navController.navigate(Routers.Home.name) {
+                    navController.navigate(Routers.Landing.name) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
                 }

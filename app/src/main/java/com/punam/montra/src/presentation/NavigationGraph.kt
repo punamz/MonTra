@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.punam.montra.src.presentation.home.HomeView
+import com.punam.montra.src.presentation.landing.LandingView
 import com.punam.montra.src.presentation.login.LoginView
 import com.punam.montra.src.presentation.onboard.OnboardView
 import com.punam.montra.src.presentation.sign_up.SignUpView
@@ -16,7 +16,7 @@ import com.punam.montra.util.Routers
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    startDestination: String = Routers.Splash.name
+    startDestination: String = Routers.Splash.name,
 ) {
     NavHost(
         navController = navController,
@@ -34,8 +34,8 @@ fun NavigationGraph(
         composable(route = Routers.SignUp.name) {
             SignUpView(navController = navController)
         }
-        composable(route = Routers.Home.name) {
-            HomeView(navController = navController)
+        composable(route = Routers.Landing.name) {
+            LandingView(navController = navController)
         }
     }
 }

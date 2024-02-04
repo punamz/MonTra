@@ -23,4 +23,8 @@
     <string name="email_empty_error">Email không được trống</string>
     <string name="name_empty_error">Tên không được trống</string>
     <string name="password_empty_error">Mật khẩu không được trống</string>
+    <string name="home">Home</string>
+    <string name="transaction">Transaction</string>
+    <string name="budget">Budget</string>
+    <string name="profile">Profile</string>
 </resources>
