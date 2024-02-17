@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.punam.montra"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -54,7 +54,7 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
@@ -68,6 +68,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
     implementation("io.arrow-kt:arrow-core:1.2.1")
     implementation("com.airbnb.android:lottie-compose:6.2.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("com.patrykandpatrick.vico:compose-m3:1.14.0-alpha.2")
+    implementation("com.patrykandpatrick.vico:views:1.14.0-alpha.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -92,4 +95,6 @@ dependencies {
 
     // navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("com.android.tools:desugar_jdk_libs:2.0.4")
+
 }

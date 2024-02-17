@@ -1,7 +1,12 @@
 package com.punam.montra.util
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 import com.punam.montra.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * validate input String is email format
@@ -38,4 +43,44 @@ fun CharSequence?.toStringRes(): Int {
         "err1006" -> R.string.err1006
         else -> R.string.err0000
     }
+}
+
+@StringRes
+fun Int.toDayOfWeekStringRes(): Int {
+    return when (this) {
+        0 -> R.string.monday_short
+        1 -> R.string.tuesday_short
+        2 -> R.string.wednesday_short
+        3 -> R.string.thursday_short
+        4 -> R.string.february_short
+        5 -> R.string.saturday_short
+        6 -> R.string.sunday_short
+        else -> R.string.monday_short
+    }
+}
+
+fun Int.toMonthStringRes(): Int {
+    return when (this) {
+        0 -> R.string.january_short
+        1 -> R.string.february_short
+        2 -> R.string.march_short
+        3 -> R.string.april_short
+        4 -> R.string.may_short
+        5 -> R.string.june_short
+        6 -> R.string.july_short
+        7 -> R.string.august_short
+        8 -> R.string.september_short
+        9 -> R.string.october_short
+        10 -> R.string.november_short
+        11 -> R.string.december_short
+        else -> R.string.january_short
+    }
+}
+
+fun String.toColor(): Color {
+    return Color(this.toColorInt())
+}
+
+fun Date.format(formatter: String): String {
+    return SimpleDateFormat(formatter, Locale.getDefault()).format(this)
 }
