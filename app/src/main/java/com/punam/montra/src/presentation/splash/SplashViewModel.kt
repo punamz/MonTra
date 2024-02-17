@@ -32,15 +32,17 @@ class SplashViewModel @Inject constructor(
             ).first()
             if (!isOnboardCompleted) {
                 _startDestination.value = Routers.Onboard.name
+                _isLoading.value = false
             } else {
-                val isLoggedIn = storeDatabase.readValue(
+                storeDatabase.readValue(
                     preferencesKey = PreferencesKey.userId,
                     default = ""
-                ).first()
-                _startDestination.value =
-                    if (isLoggedIn.isNotEmpty()) Routers.Landing.name else Routers.Login.name
+                ).collect {
+                    _startDestination.value =
+                        if (it.isNotEmpty()) Routers.Landing.name else Routers.Login.name
+                    _isLoading.value = false
+                }
             }
-            _isLoading.value = false
         }
     }
 }

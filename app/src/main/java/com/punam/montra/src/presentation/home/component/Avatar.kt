@@ -37,10 +37,6 @@ fun Avatar(
         Icon(
             imageVector = Icons.Rounded.Person,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = modifier
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(2.dp)
         )
     else
         Image(

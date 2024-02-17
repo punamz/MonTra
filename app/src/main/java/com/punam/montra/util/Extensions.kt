@@ -1,7 +1,12 @@
 package com.punam.montra.util
 
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 import com.punam.montra.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * validate input String is email format
@@ -70,4 +75,12 @@ fun Int.toMonthStringRes(): Int {
         11 -> R.string.december_short
         else -> R.string.january_short
     }
+}
+
+fun String.toColor(): Color {
+    return Color(this.toColorInt())
+}
+
+fun Date.format(formatter: String): String {
+    return SimpleDateFormat(formatter, Locale.getDefault()).format(this)
 }

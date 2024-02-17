@@ -58,7 +58,7 @@ fun HomeAppBar(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Avatar(avatarUrl = "https://raw.githubusercontent.com/punamz/test-image/master/recurring-bill.png")
+                Avatar(avatarUrl = null)
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()

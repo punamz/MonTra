@@ -23,13 +23,14 @@ import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShaders
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.punam.montra.src.presentation.component.Loading
+import com.punam.montra.util.FrequencyType
 import com.punam.montra.util.UiText
 import com.punam.montra.util.toDayOfWeekStringRes
 import com.punam.montra.util.toMonthStringRes
 
 
 @Composable
-fun TransactionChart(type: ChartType, datasetForModel: List<FloatEntry>, isLoading: Boolean) {
+fun TransactionChart(type: FrequencyType, datasetForModel: List<FloatEntry>, isLoading: Boolean) {
 
     val context = LocalContext.current
     val datasetLineSpec = arrayListOf(
@@ -68,10 +69,10 @@ fun TransactionChart(type: ChartType, datasetForModel: List<FloatEntry>, isLoadi
                     chart = LineChart(
                         lines = datasetLineSpec,
                         spacingDp = when (type) {
-                            ChartType.Month -> 45f
-                            ChartType.Today -> 70f
-                            ChartType.Week -> 60f
-                            ChartType.Year -> 80f
+                            FrequencyType.Month -> 45f
+                            FrequencyType.Today -> 70f
+                            FrequencyType.Week -> 60f
+                            FrequencyType.Year -> 80f
                         }
                     ),
                     chartModelProducer = model,
@@ -82,14 +83,13 @@ fun TransactionChart(type: ChartType, datasetForModel: List<FloatEntry>, isLoadi
                         tickLength = 0.dp,
                         valueFormatter = { value, _ ->
                             when (type) {
-                                ChartType.Month -> "${value.toInt() + 1} "
-
-                                ChartType.Today -> "${String.format("%02d", value.toInt())}:00"
-                                ChartType.Week -> UiText.StringResource(
+                                FrequencyType.Month -> "${value.toInt() + 1} "
+                                FrequencyType.Today -> "${String.format("%02d", value.toInt())}:00"
+                                FrequencyType.Week -> UiText.StringResource(
                                     value.toInt().toDayOfWeekStringRes()
                                 ).asString(context)
 
-                                ChartType.Year -> UiText.StringResource(
+                                FrequencyType.Year -> UiText.StringResource(
                                     value.toInt().toMonthStringRes()
                                 ).asString(context)
                             }
@@ -100,13 +100,3 @@ fun TransactionChart(type: ChartType, datasetForModel: List<FloatEntry>, isLoadi
     }
 }
 
-
-sealed class ChartType {
-
-    data object Today : ChartType()
-    data object Week : ChartType()
-    data object Month : ChartType()
-    data object Year : ChartType()
-
-
-}

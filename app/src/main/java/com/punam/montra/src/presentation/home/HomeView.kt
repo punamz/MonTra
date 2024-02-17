@@ -3,6 +3,7 @@ package com.punam.montra.src.presentation.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,8 +47,9 @@ fun HomeView(
         ) {
             HomeAppBar(viewModel)
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
+                modifier = Modifier.fillMaxSize(),
+
+                ) {
                 item {
                     Text(
                         text = stringResource(R.string.spend_frequency),
@@ -60,12 +62,12 @@ fun HomeView(
                         )
                     )
                     TransactionChart(
-                        type = state.chartType,
+                        type = state.frequencyType,
                         datasetForModel = state.chartData,
                         isLoading = state.chartLoading
                     )
                     TabRow(
-                        selectedTabIndex = viewModel.charTypeList.indexOf(state.chartType),
+                        selectedTabIndex = viewModel.charTypeList.indexOf(state.frequencyType),
                         containerColor = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .padding(vertical = 8.dp, horizontal = 14.dp)
@@ -80,7 +82,8 @@ fun HomeView(
                         divider = { },
                     ) {
                         viewModel.charTypeList.forEachIndexed { index, text ->
-                            val selected = viewModel.charTypeList.indexOf(state.chartType) == index
+                            val selected =
+                                viewModel.charTypeList.indexOf(state.frequencyType) == index
                             Tab(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(50))
@@ -90,7 +93,7 @@ fun HomeView(
                                     ),
                                 selected = selected,
                                 onClick = {
-                                    viewModel.onEvent((HomeEvent.ChangedChartType(viewModel.charTypeList[index])))
+                                    viewModel.onEvent((HomeEvent.ChangedFrequencyType(viewModel.charTypeList[index])))
                                 },
                                 text = {
                                     Text(
@@ -120,7 +123,14 @@ fun HomeView(
                     }
                 }
                 items(state.transactionHistory) { item ->
-                    TransactionItem("item ${item.category}")
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .padding(bottom = 8.dp)
+                    ) {
+                        TransactionItem(item)
+                    }
                 }
             }
         }
