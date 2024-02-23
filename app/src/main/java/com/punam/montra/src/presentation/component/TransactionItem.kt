@@ -1,4 +1,4 @@
-package com.punam.montra.src.presentation.home.component
+package com.punam.montra.src.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -86,8 +86,8 @@ fun TransactionItem(item: TransactionResponse) {
                     color = if (pos) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                 )
                 Text(
-                    text = item.transactionAt.format(DateFormat.hhmma),
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = item.transactionAt.format(DateFormat.hhmmDDmmyy),
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
