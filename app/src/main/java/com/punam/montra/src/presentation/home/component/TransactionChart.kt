@@ -22,6 +22,7 @@ import com.patrykandpatrick.vico.core.chart.line.LineChart
 import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShaders
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
+import com.punam.montra.src.presentation.component.ErrorData
 import com.punam.montra.src.presentation.component.Loading
 import com.punam.montra.util.FrequencyType
 import com.punam.montra.util.UiText
@@ -64,39 +65,53 @@ fun TransactionChart(type: FrequencyType, datasetForModel: List<FloatEntry>, isL
                 Loading()
             }
         else
-            ProvideChartStyle {
-                Chart(
-                    chart = LineChart(
-                        lines = datasetLineSpec,
-                        spacingDp = when (type) {
-                            FrequencyType.Month -> 45f
-                            FrequencyType.Today -> 70f
-                            FrequencyType.Week -> 60f
-                            FrequencyType.Year -> 80f
-                        }
-                    ),
-                    chartModelProducer = model,
-                    chartScrollState = scrollState,
-                    isZoomEnabled = true,
-                    marker = marker,
-                    bottomAxis = rememberBottomAxis(
-                        tickLength = 0.dp,
-                        valueFormatter = { value, _ ->
-                            when (type) {
-                                FrequencyType.Month -> "${value.toInt() + 1} "
-                                FrequencyType.Today -> "${String.format("%02d", value.toInt())}:00"
-                                FrequencyType.Week -> UiText.StringResource(
-                                    value.toInt().toDayOfWeekStringRes()
-                                ).asString(context)
-
-                                FrequencyType.Year -> UiText.StringResource(
-                                    value.toInt().toMonthStringRes()
-                                ).asString(context)
+            if (datasetForModel.isEmpty())
+                Box(
+                    modifier = Modifier
+                        .size(150.dp)
+                ) {
+                    ErrorData()
+                }
+            else
+                ProvideChartStyle {
+                    Chart(
+                        chart = LineChart(
+                            lines = datasetLineSpec,
+                            spacingDp = when (type) {
+                                FrequencyType.Month -> 45f
+                                FrequencyType.Today -> 70f
+                                FrequencyType.Week -> 60f
+                                FrequencyType.Year -> 80f
                             }
-                        },
-                    ),
-                )
-            }
+                        ),
+                        chartModelProducer = model,
+                        chartScrollState = scrollState,
+                        isZoomEnabled = true,
+                        marker = marker,
+                        bottomAxis = rememberBottomAxis(
+                            tickLength = 0.dp,
+                            valueFormatter = { value, _ ->
+                                when (type) {
+                                    FrequencyType.Month -> "${value.toInt() + 1} "
+                                    FrequencyType.Today -> "${
+                                        String.format(
+                                            "%02d",
+                                            value.toInt()
+                                        )
+                                    }:00"
+
+                                    FrequencyType.Week -> UiText.StringResource(
+                                        value.toInt().toDayOfWeekStringRes()
+                                    ).asString(context)
+
+                                    FrequencyType.Year -> UiText.StringResource(
+                                        value.toInt().toMonthStringRes()
+                                    ).asString(context)
+                                }
+                            },
+                        ),
+                    )
+                }
     }
 }
 

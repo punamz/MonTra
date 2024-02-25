@@ -15,7 +15,7 @@ class TransactionGet(
         offset: Int,
         orderBy: OrderByType? = null,
         categoryType: CategoryType? = null,
-        categoryId: String? = null
+        categoryId: List<String>? = null
     ): ViewState<List<TransactionResponse>> {
         val res = repository.getTransactions(
             userId = userId,

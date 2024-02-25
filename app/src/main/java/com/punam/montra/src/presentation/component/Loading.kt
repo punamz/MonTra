@@ -46,3 +46,12 @@ fun Loading() {
         iterations = LottieConstants.IterateForever,
     )
 }
+
+@Composable
+fun ErrorData() {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error))
+    LottieAnimation(
+        composition,
+        iterations = LottieConstants.IterateForever,
+    )
+}

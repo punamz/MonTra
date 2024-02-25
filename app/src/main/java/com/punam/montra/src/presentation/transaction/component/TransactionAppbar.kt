@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun TransactionAppBar() {
+fun TransactionAppBar(
+    onFilter: () -> Unit
+) {
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -67,7 +69,7 @@ fun TransactionAppBar() {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
-                    .clickable { }
+                    .clickable { onFilter.invoke() }
                     .border(
                         width = 2.dp,
                         color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp),

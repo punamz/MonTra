@@ -15,7 +15,7 @@ interface TransactionRepository {
         offset: Int,
         orderBy: OrderByType? = null,
         categoryType: CategoryType? = null,
-        categoryId: String? = null
+        categoryId: List<String>? = null
     ): Either<ErrorResponse, List<TransactionResponse>>
 
     suspend fun getFrequency(

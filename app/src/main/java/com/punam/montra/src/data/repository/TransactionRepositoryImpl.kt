@@ -20,7 +20,7 @@ class TransactionRepositoryImpl(
         offset: Int,
         orderBy: OrderByType?,
         categoryType: CategoryType?,
-        categoryId: String?
+        categoryId: List<String>?
     ): Either<ErrorResponse, List<TransactionResponse>> {
 
         val res = try {
