@@ -2,6 +2,7 @@ package com.punam.montra.src.data.repository
 
 import arrow.core.Either
 import com.punam.montra.src.data.remote.TransactionApi
+import com.punam.montra.src.domain.model.response.CategoryResponse
 import com.punam.montra.src.domain.model.response.ErrorResponse
 import com.punam.montra.src.domain.model.response.FrequencyResponse
 import com.punam.montra.src.domain.model.response.StatusCode
@@ -20,7 +21,7 @@ class TransactionRepositoryImpl(
         offset: Int,
         orderBy: OrderByType?,
         categoryType: CategoryType?,
-        categoryId: List<String>?
+        categoriesId: List<String>?
     ): Either<ErrorResponse, List<TransactionResponse>> {
 
         val res = try {
@@ -32,9 +33,7 @@ class TransactionRepositoryImpl(
                 params["orderBy"] = orderBy.ordinal
             if (categoryType != null)
                 params["categoryType"] = categoryType.ordinal
-            if (categoryId != null)
-                params["categoryId"] = categoryId
-            api.getTransactions(queries = params)
+            api.getTransactions(queries = params, categoriesId = categoriesId)
         } catch (ex: Exception) {
             return Either.Left(ErrorResponse(message = "Error call api $ex"))
         }
@@ -59,6 +58,29 @@ class TransactionRepositoryImpl(
             params["timeZone"] = timeZone
             params["categoryType"] = categoryType.ordinal
             api.getFrequency(queries = params)
+        } catch (ex: Exception) {
+            return Either.Left(ErrorResponse(message = "Error call api $ex"))
+        }
+        return if (res.statusCode == StatusCode.Success) Either.Right(res.data) else Either.Left(
+            ErrorResponse(
+                message = res.message,
+                errorCode = res.errorCode
+            )
+        )
+    }
+
+    override suspend fun getCategory(
+        userId: String,
+        limit: Int,
+        offset: Int
+    ): Either<ErrorResponse, List<CategoryResponse>> {
+        val res = try {
+            val params: MutableMap<String, Any?> = mutableMapOf()
+            params["userId"] = userId
+            params["limit"] = limit
+            params["offset"] = offset
+
+            api.getCategories(queries = params)
         } catch (ex: Exception) {
             return Either.Left(ErrorResponse(message = "Error call api $ex"))
         }

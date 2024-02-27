@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun <T> LazyColumnLoadMore(
     value: List<T>,
     isGettingMore: Boolean,
-    onClick: () -> Unit,
+    onRefresh: () -> Unit,
     itemBuilder: @Composable (T) -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -30,7 +30,7 @@ fun <T> LazyColumnLoadMore(
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collectLatest { index ->
                 if (index != null && index > 0 && index == listState.layoutInfo.totalItemsCount - 2) {
-                    onClick.invoke()
+                    onRefresh.invoke()
                 }
             }
     }

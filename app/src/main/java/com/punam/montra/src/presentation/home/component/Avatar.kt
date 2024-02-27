@@ -1,6 +1,5 @@
 package com.punam.montra.src.presentation.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
@@ -15,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import com.punam.montra.src.presentation.component.CachedImage
 
 
 @Composable
@@ -37,12 +36,15 @@ fun Avatar(
         Icon(
             imageVector = Icons.Rounded.Person,
             contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = modifier
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(2.dp)
         )
     else
-        Image(
-            painter = rememberAsyncImagePainter(avatarUrl),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
+        CachedImage(
+            url = avatarUrl,
             modifier = modifier,
+            contentScale = ContentScale.FillBounds,
         )
 }

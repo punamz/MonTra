@@ -2,6 +2,7 @@ package com.punam.montra.util
 
 object AppConstant {
     const val MIN_PASSWORD_LENGTH = 8
+    const val SelectCategoryArgKey = "categoriesSelected"
 }
 
 object DateFormat {

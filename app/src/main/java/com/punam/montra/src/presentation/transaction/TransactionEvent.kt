@@ -8,7 +8,7 @@ sealed class TransactionEvent {
     data object GetMore : TransactionEvent()
     data class ToggleFilterBottomSheet(val value: Boolean) : TransactionEvent()
     data class Filter(
-        val categoryType: CategoryType,
+        val categoryType: CategoryType?,
         val orderByType: OrderByType,
         val categories: List<String>
     ) : TransactionEvent()

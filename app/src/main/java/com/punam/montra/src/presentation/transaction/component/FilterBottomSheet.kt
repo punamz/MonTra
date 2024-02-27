@@ -14,8 +14,10 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,37 +30,52 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.punam.montra.src.presentation.transaction.SelectionButton
+import com.google.gson.Gson
+import com.patrykandpatrick.vico.core.extension.setAll
+import com.punam.montra.util.AppConstant
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.OrderByType
+import com.punam.montra.util.Routers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
     lastOrderByType: OrderByType,
-    lastCategoryType: CategoryType,
+    lastCategoryType: CategoryType?,
     lastCategories: List<String>,
-    onConfirm: (CategoryType, OrderByType, List<String>) -> Unit,
+    onConfirm: (CategoryType?, OrderByType, List<String>) -> Unit,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
     navController: NavController,
 ) {
 
+    var categoryType by remember { mutableStateOf(lastCategoryType) }
+    var orderByType by remember { mutableStateOf(lastOrderByType) }
+    val categories = remember { mutableStateListOf<String>() }
+    categories.addAll(lastCategories)
+
+    fun resetData() {
+        categoryType = null
+        orderByType = OrderByType.Newest
+        categories.clear()
+    }
+
+    fun updateCategoryType(newCategoryType: CategoryType) {
+        categoryType = if (categoryType != newCategoryType) newCategoryType else null
+    }
+
+    if (navController.currentBackStackEntry?.savedStateHandle?.contains(AppConstant.SelectCategoryArgKey) == true) {
+        val navBackData =
+            navController.currentBackStackEntry?.savedStateHandle?.get<List<String>>(
+                AppConstant.SelectCategoryArgKey
+            ) ?: emptyList()
+        categories.setAll(navBackData)
+    }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
     ) {
 
-        var categoryType by remember { mutableStateOf(lastCategoryType) }
-        var orderByType by remember { mutableStateOf(lastOrderByType) }
-        val categories = remember { mutableStateListOf<String>() }
-        categories.addAll(lastCategories)
-
-        fun resetValue() {
-            categoryType = CategoryType.Expenses
-            orderByType = OrderByType.Newest
-            categories.clear()
-        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -77,7 +94,7 @@ fun FilterBottomSheet(
                     text = "Filter Transaction",
                     style = MaterialTheme.typography.titleLarge,
                 )
-                ElevatedButton(onClick = ::resetValue) {
+                ElevatedButton(onClick = ::resetData) {
                     Text(text = "Reset")
                 }
             }
@@ -94,19 +111,19 @@ fun FilterBottomSheet(
                     isSelected = categoryType == CategoryType.Income,
                     modifier = Modifier.weight(1f),
                     label = "Income",
-                    onClick = { categoryType = CategoryType.Income },
+                    onClick = { updateCategoryType(CategoryType.Income) },
                 )
                 SelectionButton(
                     isSelected = categoryType == CategoryType.Expenses,
                     modifier = Modifier.weight(1f),
                     label = "Expense",
-                    onClick = { categoryType = CategoryType.Expenses },
+                    onClick = { updateCategoryType(CategoryType.Expenses) },
                 )
                 SelectionButton(
                     isSelected = categoryType == CategoryType.Transfer,
                     modifier = Modifier.weight(1f),
                     label = "Transfer",
-                    onClick = { categoryType = CategoryType.Transfer },
+                    onClick = { updateCategoryType(CategoryType.Transfer) },
                 )
 
             }
@@ -161,7 +178,10 @@ fun FilterBottomSheet(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { print(0) }
+                    .clickable {
+                        val arg = Gson().toJson(categories.toList())
+                        navController.navigate(Routers.SelectCategory.name + "/$arg")
+                    }
                     .padding(vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -197,4 +217,21 @@ fun FilterBottomSheet(
             }
         }
     }
+}
+
+@Composable
+fun SelectionButton(
+    isSelected: Boolean,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier,
+) {
+    if (isSelected)
+        FilledTonalButton(onClick = onClick, modifier = modifier) {
+            Text(text = label)
+        }
+    else
+        OutlinedButton(onClick = onClick, modifier = modifier) {
+            Text(text = label)
+        }
 }

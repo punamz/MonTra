@@ -9,7 +9,7 @@ data class TransactionState(
     val isGettingMore: Boolean = false,
     val transactions: List<TransactionResponse> = emptyList(),
     val showBottomSheet: Boolean = false,
-    val categoryType: CategoryType = CategoryType.Expenses,
+    val categoryType: CategoryType? = null,
     val orderByType: OrderByType = OrderByType.Newest,
     val categories: List<String>? = null
 )

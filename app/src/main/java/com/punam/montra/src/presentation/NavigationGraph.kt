@@ -3,13 +3,17 @@ package com.punam.montra.src.presentation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.punam.montra.src.presentation.landing.LandingView
 import com.punam.montra.src.presentation.login.LoginView
 import com.punam.montra.src.presentation.onboard.OnboardView
+import com.punam.montra.src.presentation.select_category.SelectCategoryView
 import com.punam.montra.src.presentation.sign_up.SignUpView
 import com.punam.montra.src.presentation.splash.SplashView
+import com.punam.montra.util.AppConstant
 import com.punam.montra.util.Routers
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -36,6 +40,16 @@ fun NavigationGraph(
         }
         composable(route = Routers.Landing.name) {
             LandingView(navController = navController)
+        }
+        composable(
+            route = Routers.SelectCategory.name + "/${AppConstant.SelectCategoryArgKey}",
+            arguments = listOf(navArgument(AppConstant.SelectCategoryArgKey) {
+                type = NavType.StringType
+                defaultValue = null
+                nullable = true
+            })
+        ) {
+            SelectCategoryView(navController = navController)
         }
     }
 }
