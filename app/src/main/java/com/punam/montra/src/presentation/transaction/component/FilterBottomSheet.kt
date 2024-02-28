@@ -28,10 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.patrykandpatrick.vico.core.extension.setAll
+import com.punam.montra.R
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.OrderByType
@@ -91,15 +93,15 @@ fun FilterBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Filter Transaction",
+                    text = stringResource(R.string.filter_transaction),
                     style = MaterialTheme.typography.titleLarge,
                 )
                 ElevatedButton(onClick = ::resetData) {
-                    Text(text = "Reset")
+                    Text(text = stringResource(R.string.reset))
                 }
             }
             Text(
-                text = "Filter By",
+                text = stringResource(R.string.filter_by),
                 style = MaterialTheme.typography.titleMedium,
             )
             Row(
@@ -110,25 +112,28 @@ fun FilterBottomSheet(
                 SelectionButton(
                     isSelected = categoryType == CategoryType.Income,
                     modifier = Modifier.weight(1f),
-                    label = "Income",
+                    label = stringResource(id = R.string.income),
                     onClick = { updateCategoryType(CategoryType.Income) },
+                    enable = categories.isEmpty()
                 )
                 SelectionButton(
                     isSelected = categoryType == CategoryType.Expenses,
                     modifier = Modifier.weight(1f),
-                    label = "Expense",
+                    label = stringResource(id = R.string.expenses),
                     onClick = { updateCategoryType(CategoryType.Expenses) },
+                    enable = categories.isEmpty()
                 )
                 SelectionButton(
                     isSelected = categoryType == CategoryType.Transfer,
                     modifier = Modifier.weight(1f),
-                    label = "Transfer",
+                    label = stringResource(R.string.transfer),
                     onClick = { updateCategoryType(CategoryType.Transfer) },
+                    enable = categories.isEmpty()
                 )
 
             }
             Text(
-                text = "Sort By",
+                text = stringResource(R.string.sort_by),
                 style = MaterialTheme.typography.titleMedium,
             )
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -139,19 +144,19 @@ fun FilterBottomSheet(
                     SelectionButton(
                         isSelected = orderByType == OrderByType.Highest,
                         modifier = Modifier.weight(1f),
-                        label = "Highest",
+                        label = stringResource(R.string.highest),
                         onClick = { orderByType = OrderByType.Highest },
                     )
                     SelectionButton(
                         isSelected = orderByType == OrderByType.Lowest,
                         modifier = Modifier.weight(1f),
-                        label = "Lowest",
+                        label = stringResource(R.string.lowest),
                         onClick = { orderByType = OrderByType.Lowest },
                     )
                     SelectionButton(
                         isSelected = orderByType == OrderByType.Newest,
                         modifier = Modifier.weight(1f),
-                        label = "Newest",
+                        label = stringResource(R.string.newest),
                         onClick = { orderByType = OrderByType.Newest },
                     )
 
@@ -163,7 +168,7 @@ fun FilterBottomSheet(
                     SelectionButton(
                         isSelected = orderByType == OrderByType.Oldest,
                         modifier = Modifier.weight(1f),
-                        label = "Oldest",
+                        label = stringResource(R.string.oldest),
                         onClick = { orderByType = OrderByType.Oldest },
                     )
                     Box(modifier = Modifier.weight(1f))
@@ -172,7 +177,7 @@ fun FilterBottomSheet(
             }
 
             Text(
-                text = "Category",
+                text = stringResource(R.string.category),
                 style = MaterialTheme.typography.titleMedium,
             )
             Row(
@@ -187,14 +192,14 @@ fun FilterBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Choose Category",
+                    text = stringResource(R.string.choose_category),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${categories.size} Selected",
+                        text = stringResource(R.string.selected, categories.size),
                         style = MaterialTheme.typography.labelMedium,
                     )
 
@@ -213,7 +218,7 @@ fun FilterBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text(text = "Apply")
+                Text(text = stringResource(R.string.apply))
             }
         }
     }
@@ -222,16 +227,26 @@ fun FilterBottomSheet(
 @Composable
 fun SelectionButton(
     isSelected: Boolean,
+    enable: Boolean = true,
     label: String,
     onClick: () -> Unit,
     modifier: Modifier,
 ) {
     if (isSelected)
-        FilledTonalButton(onClick = onClick, modifier = modifier) {
+        FilledTonalButton(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enable
+        ) {
             Text(text = label)
         }
     else
-        OutlinedButton(onClick = onClick, modifier = modifier) {
+        OutlinedButton(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enable
+        ) {
             Text(text = label)
         }
+
 }

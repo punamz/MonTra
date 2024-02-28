@@ -1,6 +1,7 @@
 package com.punam.montra.src.presentation.select_category.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ fun CategoryItem(
             .clip(RoundedCornerShape(24.dp))
             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
             .padding(16.dp)
+            .clickable { onChange.invoke(!selected) }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

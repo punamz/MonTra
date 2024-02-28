@@ -42,12 +42,14 @@ fun NavigationGraph(
             LandingView(navController = navController)
         }
         composable(
-            route = Routers.SelectCategory.name + "/${AppConstant.SelectCategoryArgKey}",
-            arguments = listOf(navArgument(AppConstant.SelectCategoryArgKey) {
-                type = NavType.StringType
-                defaultValue = null
-                nullable = true
-            })
+            route = Routers.SelectCategory.name + "/{${AppConstant.SelectCategoryArgKey}}",
+            arguments = listOf(
+                navArgument(AppConstant.SelectCategoryArgKey) {
+                    type = NavType.StringType
+                    defaultValue = null
+                    nullable = true
+                }
+            )
         ) {
             SelectCategoryView(navController = navController)
         }

@@ -87,10 +87,6 @@ class SelectCategoryViewModel @Inject constructor(
                 categories = categories,
             )
             if (result !is ViewState.Success) canLoadMore = false
-            _state.value = _state.value.copy(
-                isLoading = false,
-                isGettingMore = false,
-            )
         }
     }
 

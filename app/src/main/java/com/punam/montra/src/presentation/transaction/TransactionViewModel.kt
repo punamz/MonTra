@@ -96,10 +96,6 @@ class TransactionViewModel @Inject constructor(
                 transactions = transactions,
             )
             if (result !is ViewState.Success) canLoadMore = false
-            _state.value = _state.value.copy(
-                isLoading = false,
-                isGettingMore = false,
-            )
         }
     }
 

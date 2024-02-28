@@ -23,9 +23,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.punam.montra.R
 import com.punam.montra.src.presentation.component.EmptyData
 import com.punam.montra.src.presentation.component.LazyColumnLoadMore
 import com.punam.montra.src.presentation.component.Loading
@@ -49,7 +51,7 @@ fun SelectCategoryView(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "${state.categoriesSelected.size} Selected")
+                    Text(text = stringResource(R.string.selected, state.categoriesSelected.size))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -130,7 +132,7 @@ fun SelectCategoryView(
                                     )
                                     navController.popBackStack()
                                 }) {
-                                Text(text = "Confirm")
+                                Text(text = stringResource(R.string.apply))
                             }
                         }
 
