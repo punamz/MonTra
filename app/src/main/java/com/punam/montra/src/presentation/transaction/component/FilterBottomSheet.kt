@@ -1,6 +1,5 @@
 package com.punam.montra.src.presentation.transaction.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,9 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,13 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.gson.Gson
 import com.patrykandpatrick.vico.core.extension.setAll
 import com.punam.montra.R
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.OrderByType
-import com.punam.montra.util.Routers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -175,41 +169,41 @@ fun FilterBottomSheet(
                     Box(modifier = Modifier.weight(1f))
                 }
             }
-
-            Text(
-                text = stringResource(R.string.category),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        val arg = Gson().toJson(categories.toList())
-                        navController.navigate(Routers.SelectCategory.name + "/$arg")
-                    }
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.choose_category),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.selected, categories.size),
-                        style = MaterialTheme.typography.labelMedium,
-                    )
-
-                    Icon(
-                        imageVector = Icons.Rounded.ChevronRight,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
+            /// close this feature / find another way to handle it
+//            Text(
+//                text = stringResource(R.string.category),
+//                style = MaterialTheme.typography.titleMedium,
+//            )
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .clickable {
+//                        val arg = Gson().toJson(categories.toList())
+//                        navController.navigate(Routers.SelectCategory.name + "/$arg")
+//                    }
+//                    .padding(vertical = 16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Text(
+//                    text = stringResource(R.string.choose_category),
+//                    style = MaterialTheme.typography.bodyMedium,
+//                )
+//                Row(
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = stringResource(R.string.selected, categories.size),
+//                        style = MaterialTheme.typography.labelMedium,
+//                    )
+//
+//                    Icon(
+//                        imageVector = Icons.Rounded.ChevronRight,
+//                        contentDescription = null,
+//                        tint = MaterialTheme.colorScheme.primary
+//                    )
+//                }
+//            }
             Button(
                 onClick = {
                     onConfirm.invoke(categoryType, orderByType, categories.toList())

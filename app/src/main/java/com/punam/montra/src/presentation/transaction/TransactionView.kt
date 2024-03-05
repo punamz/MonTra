@@ -86,7 +86,14 @@ fun TransactionView(
                             value = state.transactions,
                             isGettingMore = state.isGettingMore,
                             onRefresh = { viewModel.onEvent(TransactionEvent.GetMore) }) {
-                            TransactionItem(item = it)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp)
+                                    .padding(bottom = 8.dp)
+                            ) {
+                                TransactionItem(item = it)
+                            }
                         }
                     PullRefreshIndicator(
                         refreshing = false,

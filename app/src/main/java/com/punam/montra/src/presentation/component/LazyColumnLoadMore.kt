@@ -39,14 +39,7 @@ fun <T> LazyColumnLoadMore(
         modifier = Modifier.fillMaxSize(),
     ) {
         items(value) { item ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(bottom = 8.dp)
-            ) {
-                itemBuilder(item)
-            }
+            itemBuilder(item)
         }
         item {
             if (isGettingMore) {
