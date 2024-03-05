@@ -1,4 +1,4 @@
-package com.punam.montra.src.presentation.transaction.component
+package com.punam.montra.src.presentation.filter_transaction
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,67 +14,49 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.gson.Gson
-import com.patrykandpatrick.vico.core.extension.setAll
 import com.punam.montra.R
+import com.punam.montra.src.presentation.filter_transaction.component.SelectionButton
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.OrderByType
 import com.punam.montra.util.Routers
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterBottomSheet(
-    lastOrderByType: OrderByType,
-    lastCategoryType: CategoryType?,
-    lastCategories: List<String>,
-    onConfirm: (CategoryType?, OrderByType, List<String>) -> Unit,
-    onDismissRequest: () -> Unit,
-    sheetState: SheetState,
-    navController: NavController,
+fun FilterTransactionView(
+    viewModel: FilterTransactionViewModel = hiltViewModel(),
+    navController: NavController
 ) {
-
-    var categoryType by remember { mutableStateOf(lastCategoryType) }
-    var orderByType by remember { mutableStateOf(lastOrderByType) }
-    val categories = remember { mutableStateListOf<String>() }
-    categories.addAll(lastCategories)
-
-    fun resetData() {
-        categoryType = null
-        orderByType = OrderByType.Newest
-        categories.clear()
-    }
-
-    fun updateCategoryType(newCategoryType: CategoryType) {
-        categoryType = if (categoryType != newCategoryType) newCategoryType else null
-    }
+    val state = viewModel.state.value
+    val sheetState = rememberModalBottomSheetState(true)
 
     if (navController.currentBackStackEntry?.savedStateHandle?.contains(AppConstant.SelectCategoryArgKey) == true) {
-        val navBackData =
-            navController.currentBackStackEntry?.savedStateHandle?.get<List<String>>(
-                AppConstant.SelectCategoryArgKey
-            ) ?: emptyList()
-        categories.setAll(navBackData)
+        val navBackData = navController.currentBackStackEntry?.savedStateHandle?.get<List<String>>(
+            AppConstant.SelectCategoryArgKey
+        ) ?: emptyList()
+        // clear data
+        navController.currentBackStackEntry?.savedStateHandle?.remove<List<String>>(
+            AppConstant.SelectCategoryArgKey
+        )
+        viewModel.onEvent(FilterTransactionEvent.UpdateCategories(navBackData))
     }
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = {
+            navController.popBackStack()
+        },
         sheetState = sheetState
     ) {
 
@@ -86,7 +68,6 @@ fun FilterBottomSheet(
 
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -96,7 +77,7 @@ fun FilterBottomSheet(
                     text = stringResource(R.string.filter_transaction),
                     style = MaterialTheme.typography.titleLarge,
                 )
-                ElevatedButton(onClick = ::resetData) {
+                ElevatedButton(onClick = { viewModel.onEvent(FilterTransactionEvent.Reset) }) {
                     Text(text = stringResource(R.string.reset))
                 }
             }
@@ -110,25 +91,43 @@ fun FilterBottomSheet(
             ) {
 
                 SelectionButton(
-                    isSelected = categoryType == CategoryType.Income,
+                    isSelected = state.categoryType == CategoryType.Income,
                     modifier = Modifier.weight(1f),
                     label = stringResource(id = R.string.income),
-                    onClick = { updateCategoryType(CategoryType.Income) },
-                    enable = categories.isEmpty()
+                    onClick = {
+                        viewModel.onEvent(
+                            FilterTransactionEvent.ChangeCategoryType(
+                                CategoryType.Income
+                            )
+                        )
+                    },
+                    enable = state.categories.isEmpty()
                 )
                 SelectionButton(
-                    isSelected = categoryType == CategoryType.Expenses,
+                    isSelected = state.categoryType == CategoryType.Expenses,
                     modifier = Modifier.weight(1f),
                     label = stringResource(id = R.string.expenses),
-                    onClick = { updateCategoryType(CategoryType.Expenses) },
-                    enable = categories.isEmpty()
+                    onClick = {
+                        viewModel.onEvent(
+                            FilterTransactionEvent.ChangeCategoryType(
+                                CategoryType.Expenses
+                            )
+                        )
+                    },
+                    enable = state.categories.isEmpty()
                 )
                 SelectionButton(
-                    isSelected = categoryType == CategoryType.Transfer,
+                    isSelected = state.categoryType == CategoryType.Transfer,
                     modifier = Modifier.weight(1f),
                     label = stringResource(R.string.transfer),
-                    onClick = { updateCategoryType(CategoryType.Transfer) },
-                    enable = categories.isEmpty()
+                    onClick = {
+                        viewModel.onEvent(
+                            FilterTransactionEvent.ChangeCategoryType(
+                                CategoryType.Transfer
+                            )
+                        )
+                    },
+                    enable = state.categories.isEmpty()
                 )
 
             }
@@ -142,34 +141,58 @@ fun FilterBottomSheet(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     SelectionButton(
-                        isSelected = orderByType == OrderByType.Highest,
+                        isSelected = state.orderByType == OrderByType.Highest,
                         modifier = Modifier.weight(1f),
                         label = stringResource(R.string.highest),
-                        onClick = { orderByType = OrderByType.Highest },
+                        onClick = {
+                            viewModel.onEvent(
+                                FilterTransactionEvent.ChangeOrderByType(
+                                    OrderByType.Highest
+                                )
+                            )
+                        },
                     )
                     SelectionButton(
-                        isSelected = orderByType == OrderByType.Lowest,
+                        isSelected = state.orderByType == OrderByType.Lowest,
                         modifier = Modifier.weight(1f),
                         label = stringResource(R.string.lowest),
-                        onClick = { orderByType = OrderByType.Lowest },
+                        onClick = {
+                            viewModel.onEvent(
+                                FilterTransactionEvent.ChangeOrderByType(
+                                    OrderByType.Lowest
+                                )
+                            )
+                        },
                     )
                     SelectionButton(
-                        isSelected = orderByType == OrderByType.Newest,
+                        isSelected = state.orderByType == OrderByType.Newest,
                         modifier = Modifier.weight(1f),
                         label = stringResource(R.string.newest),
-                        onClick = { orderByType = OrderByType.Newest },
-                    )
+                        onClick = {
 
+                            viewModel.onEvent(
+                                FilterTransactionEvent.ChangeOrderByType(
+                                    OrderByType.Newest
+                                )
+                            )
+                        },
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     SelectionButton(
-                        isSelected = orderByType == OrderByType.Oldest,
+                        isSelected = state.orderByType == OrderByType.Oldest,
                         modifier = Modifier.weight(1f),
                         label = stringResource(R.string.oldest),
-                        onClick = { orderByType = OrderByType.Oldest },
+                        onClick = {
+                            viewModel.onEvent(
+                                FilterTransactionEvent.ChangeOrderByType(
+                                    OrderByType.Oldest
+                                )
+                            )
+                        },
                     )
                     Box(modifier = Modifier.weight(1f))
                     Box(modifier = Modifier.weight(1f))
@@ -184,7 +207,7 @@ fun FilterBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        val arg = Gson().toJson(categories.toList())
+                        val arg = Gson().toJson(state.categories.toList())
                         navController.navigate(Routers.SelectCategory.name + "/$arg")
                     }
                     .padding(vertical = 16.dp),
@@ -199,7 +222,7 @@ fun FilterBottomSheet(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.selected, categories.size),
+                        text = stringResource(R.string.selected, state.categories.size),
                         style = MaterialTheme.typography.labelMedium,
                     )
 
@@ -212,8 +235,17 @@ fun FilterBottomSheet(
             }
             Button(
                 onClick = {
-                    onConfirm.invoke(categoryType, orderByType, categories.toList())
-                    onDismissRequest.invoke()
+                    val result = FilterTransactionResult(
+                        categoryType = state.categoryType,
+                        orderByType = state.orderByType,
+                        categoriesSelected = state.categories
+                    )
+                    val a = Gson().toJson(result)
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        "Hi",
+                        a
+                    )
+                    navController.popBackStack()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp)
@@ -224,29 +256,8 @@ fun FilterBottomSheet(
     }
 }
 
-@Composable
-fun SelectionButton(
-    isSelected: Boolean,
-    enable: Boolean = true,
-    label: String,
-    onClick: () -> Unit,
-    modifier: Modifier,
-) {
-    if (isSelected)
-        FilledTonalButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enable
-        ) {
-            Text(text = label)
-        }
-    else
-        OutlinedButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enable
-        ) {
-            Text(text = label)
-        }
-
-}
+class FilterTransactionResult(
+    val categoryType: CategoryType?,
+    val orderByType: OrderByType,
+    val categoriesSelected: List<String>,
+)

@@ -11,36 +11,67 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.punam.montra.src.presentation.component.EmptyData
 import com.punam.montra.src.presentation.component.LazyColumnLoadMore
 import com.punam.montra.src.presentation.component.Loading
 import com.punam.montra.src.presentation.component.TransactionItem
-import com.punam.montra.src.presentation.transaction.component.FilterBottomSheet
+import com.punam.montra.src.presentation.filter_transaction.FilterTransactionResult
 import com.punam.montra.src.presentation.transaction.component.FinancialReportButton
 import com.punam.montra.src.presentation.transaction.component.TransactionAppBar
+import com.punam.montra.util.Routers
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TransactionView(
     viewModel: TransactionViewModel = hiltViewModel(),
     navController: NavController,
+    navBackStackEntry: NavBackStackEntry,
+    filterTransactionResult: FilterTransactionResult?
 ) {
     val state = viewModel.state.value
     val pullRefreshState = rememberPullRefreshState(
         refreshing = false,
         onRefresh = { viewModel.onEvent(TransactionEvent.Refresh) }
     )
-    val sheetState = rememberModalBottomSheetState(true)
-
+//
+//    if (navBackStackEntry.savedStateHandle.contains("Hi")) {
+//        val navBackData = navBackStackEntry.savedStateHandle.get<String>(
+//            "Hi"
+//        )
+//
+//        // clear data
+//        navBackStackEntry.savedStateHandle.remove<String>(
+//            "Hi"
+//        )
+//        val type = object : TypeToken<FilterTransactionResult>() {}.type
+//        val a = Gson().fromJson<FilterTransactionResult>(navBackData, type)
+//
+//        if (navBackData != null)
+//            viewModel.onEvent(
+//                TransactionEvent.Filter(
+//                    orderByType = a.orderByType,
+//                    categoryType = a.categoryType,
+//                    categories = a.categoriesSelected
+//                )
+//            )
+//    }
+    if (filterTransactionResult != null) {
+        viewModel.onEvent(
+            TransactionEvent.Filter(
+                orderByType = filterTransactionResult.orderByType,
+                categoryType = filterTransactionResult.categoryType,
+                categories = filterTransactionResult.categoriesSelected
+            )
+        )
+    }
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
@@ -48,7 +79,8 @@ fun TransactionView(
                 .padding(innerPadding)
         ) {
             TransactionAppBar(onFilter = {
-                viewModel.onEvent(TransactionEvent.ToggleFilterBottomSheet(true))
+                navController.navigate(Routers.FilterTransaction.name)
+//                navController.navigate(Routers.SignUp.name)
             })
             FinancialReportButton()
 
@@ -86,7 +118,14 @@ fun TransactionView(
                             value = state.transactions,
                             isGettingMore = state.isGettingMore,
                             onRefresh = { viewModel.onEvent(TransactionEvent.GetMore) }) {
-                            TransactionItem(item = it)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp)
+                                    .padding(bottom = 8.dp)
+                            ) {
+                                TransactionItem(item = it)
+                            }
                         }
                     PullRefreshIndicator(
                         refreshing = false,
@@ -96,30 +135,30 @@ fun TransactionView(
                 }
 
             }
-
-            if (state.showBottomSheet) {
-                FilterBottomSheet(
-                    onDismissRequest = {
-                        viewModel.onEvent(
-                            TransactionEvent.ToggleFilterBottomSheet(false)
-                        )
-                    },
-                    sheetState = sheetState,
-                    lastCategoryType = state.categoryType,
-                    lastCategories = state.categories ?: emptyList(),
-                    lastOrderByType = state.orderByType,
-                    onConfirm = { categoryType, orderByType, categories ->
-                        viewModel.onEvent(
-                            TransactionEvent.Filter(
-                                categoryType = categoryType,
-                                orderByType = orderByType,
-                                categories = categories
-                            )
-                        )
-                    },
-                    navController = navController,
-                )
-            }
+//
+//            if (state.showBottomSheet) {
+//                FilterBottomSheet(
+//                    onDismissRequest = {
+//                        viewModel.onEvent(
+//                            TransactionEvent.ToggleFilterBottomSheet(false)
+//                        )
+//                    },
+//                    sheetState = sheetState,
+//                    lastCategoryType = state.categoryType,
+//                    lastCategories = state.categories ?: emptyList(),
+//                    lastOrderByType = state.orderByType,
+//                    onConfirm = { categoryType, orderByType, categories ->
+//                        viewModel.onEvent(
+//                            TransactionEvent.Filter(
+//                                categoryType = categoryType,
+//                                orderByType = orderByType,
+//                                categories = categories
+//                            )
+//                        )
+//                    },
+//                    navController = navController,
+//                )
+//            }
         }
     }
 }

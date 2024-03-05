@@ -9,6 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.punam.montra.src.presentation.splash.SplashViewModel
 import com.punam.montra.ui.theme.MonTraTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +24,7 @@ class MainActivity : ComponentActivity() {
     lateinit var splashViewModel: SplashViewModel
 
 
+    @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,8 +38,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
+
+                    val bottomSheetNavigator = rememberBottomSheetNavigator()
+                    val navController = rememberNavController(bottomSheetNavigator)
                     NavigationGraph(
+                        bottomSheetNavigator = bottomSheetNavigator,
                         navController = navController,
                         startDestination = splashViewModel.startDestination.value
                     )

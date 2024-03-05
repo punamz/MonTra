@@ -36,9 +36,9 @@ fun CategoryItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
-            .padding(16.dp)
             .clickable { onChange.invoke(!selected) }
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp))
+            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

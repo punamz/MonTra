@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.punam.montra.src.presentation.budget.BudgetView
+import com.punam.montra.src.presentation.filter_transaction.FilterTransactionResult
 import com.punam.montra.src.presentation.home.HomeView
 import com.punam.montra.src.presentation.profile.ProfileView
 import com.punam.montra.src.presentation.transaction.TransactionView
@@ -26,10 +28,12 @@ import com.punam.montra.util.Routers
 @Composable
 fun LandingView(
     navController: NavController,
+    navBackStackEntry: NavBackStackEntry,
+    filterTransactionResult: FilterTransactionResult?
 ) {
     val bottomNavController = rememberNavController()
-    val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val bottomNavBackStackEntry by bottomNavController.currentBackStackEntryAsState()
+    val currentDestination = bottomNavBackStackEntry?.destination
     val screens = listOf(
         LandingBottomItem.Home,
         LandingBottomItem.Transaction,
@@ -93,7 +97,13 @@ fun LandingView(
                     },
                 )
             }
-            composable(Routers.Transaction.name) { TransactionView(navController = navController) }
+            composable(Routers.Transaction.name) {
+                TransactionView(
+                    navController = navController,
+                    navBackStackEntry = navBackStackEntry,
+                    filterTransactionResult = filterTransactionResult,
+                )
+            }
             composable(Routers.Budget.name) { BudgetView(navController = navController) }
             composable(Routers.Profile.name) { ProfileView(navController = navController) }
         }
