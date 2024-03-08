@@ -70,7 +70,29 @@ fun LandingView(
             startDestination = Routers.Home.name,
             Modifier.padding(paddingValues)
         ) {
-            composable(Routers.Home.name) { HomeView(navController = navController) }
+            composable(Routers.Home.name) {
+                HomeView(
+                    navController = navController,
+                    changeToTransactionTab = {
+                        bottomNavController.navigate(Routers.Transaction.name) {
+                            popUpTo(bottomNavController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    changeToProfileTab = {
+                        bottomNavController.navigate(Routers.Profile.name) {
+                            popUpTo(bottomNavController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                )
+            }
             composable(Routers.Transaction.name) { TransactionView(navController = navController) }
             composable(Routers.Budget.name) { BudgetView(navController = navController) }
             composable(Routers.Profile.name) { ProfileView(navController = navController) }

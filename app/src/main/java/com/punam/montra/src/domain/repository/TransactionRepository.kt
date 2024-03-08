@@ -1,6 +1,7 @@
 package com.punam.montra.src.domain.repository
 
 import arrow.core.Either
+import com.punam.montra.src.domain.model.response.CategoryResponse
 import com.punam.montra.src.domain.model.response.ErrorResponse
 import com.punam.montra.src.domain.model.response.FrequencyResponse
 import com.punam.montra.src.domain.model.response.TransactionResponse
@@ -15,7 +16,7 @@ interface TransactionRepository {
         offset: Int,
         orderBy: OrderByType? = null,
         categoryType: CategoryType? = null,
-        categoryId: String? = null
+        categoriesId: List<String>? = null
     ): Either<ErrorResponse, List<TransactionResponse>>
 
     suspend fun getFrequency(
@@ -24,4 +25,10 @@ interface TransactionRepository {
         categoryType: CategoryType = CategoryType.Expenses,
         timeZone: Int = 0
     ): Either<ErrorResponse, FrequencyResponse>
+
+    suspend fun getCategory(
+        userId: String,
+        limit: Int,
+        offset: Int,
+    ): Either<ErrorResponse, List<CategoryResponse>>
 }

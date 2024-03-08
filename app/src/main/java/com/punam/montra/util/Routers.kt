@@ -10,4 +10,5 @@ sealed class Routers(val name: String) {
     data object Transaction : Routers("transaction")
     data object Budget : Routers("budget")
     data object Profile : Routers("profile")
+    data object SelectCategory : Routers("select_category")
 }

@@ -2,6 +2,7 @@ package com.punam.montra.di
 
 import com.punam.montra.src.domain.repository.TransactionRepository
 import com.punam.montra.src.domain.repository.UserRepository
+import com.punam.montra.src.domain.use_case.transaction.CategoryGet
 import com.punam.montra.src.domain.use_case.transaction.FrequencyGet
 import com.punam.montra.src.domain.use_case.transaction.TransactionGet
 import com.punam.montra.src.domain.use_case.transaction.TransactionUseCase
@@ -31,7 +32,8 @@ object UseCaseModule {
     fun providerTransactionUseCases(repository: TransactionRepository): TransactionUseCase {
         return TransactionUseCase(
             transactionGet = TransactionGet(repository),
-            frequencyGet = FrequencyGet(repository)
+            frequencyGet = FrequencyGet(repository),
+            categoryGet = CategoryGet(repository)
         )
     }
 }

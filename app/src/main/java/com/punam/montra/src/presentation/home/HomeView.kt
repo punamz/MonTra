@@ -28,14 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.punam.montra.R
+import com.punam.montra.src.presentation.component.TransactionItem
 import com.punam.montra.src.presentation.home.component.HomeAppBar
 import com.punam.montra.src.presentation.home.component.TransactionChart
-import com.punam.montra.src.presentation.home.component.TransactionItem
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController,
+    changeToTransactionTab: () -> Unit,
+    changeToProfileTab: () -> Unit,
 ) {
 
     val state = viewModel.state.value
@@ -45,7 +47,7 @@ fun HomeView(
                 .fillMaxWidth()
                 .padding(innerPadding)
         ) {
-            HomeAppBar(viewModel)
+            HomeAppBar(viewModel, changeToProfileTab::invoke)
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
 
@@ -117,7 +119,7 @@ fun HomeView(
                             text = stringResource(R.string.recent_transaction),
                             style = MaterialTheme.typography.titleMedium,
                         )
-                        ElevatedButton(onClick = { }) {
+                        ElevatedButton(onClick = changeToTransactionTab::invoke) {
                             Text(text = stringResource(R.string.see_all))
                         }
                     }

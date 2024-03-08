@@ -15,7 +15,7 @@ class TransactionGet(
         offset: Int,
         orderBy: OrderByType? = null,
         categoryType: CategoryType? = null,
-        categoryId: String? = null
+        categoriesId: List<String>? = null
     ): ViewState<List<TransactionResponse>> {
         val res = repository.getTransactions(
             userId = userId,
@@ -23,7 +23,7 @@ class TransactionGet(
             offset = offset,
             orderBy = orderBy,
             categoryType = categoryType,
-            categoryId = categoryId
+            categoriesId = categoriesId
         )
         return res.fold(
             { ViewState.Error(it) },

@@ -52,4 +52,17 @@
     <string name="account_balance">Account Balance</string>
     <string name="income">Income</string>
     <string name="expenses">Expenses</string>
+    <string name="transfer">Transfer</string>
+    <string name="filter_transaction">Filter Transaction</string>
+    <string name="reset">Reset</string>
+    <string name="filter_by">Filter By</string>
+    <string name="sort_by">Sort By</string>
+    <string name="highest">Highest</string>
+    <string name="lowest">Lowest</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+    <string name="category">Category</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="selected">%1$s Selected</string>
+    <string name="apply">Apply</string>
 </resources>

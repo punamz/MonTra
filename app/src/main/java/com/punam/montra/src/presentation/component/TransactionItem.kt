@@ -1,6 +1,5 @@
-package com.punam.montra.src.presentation.home.component
+package com.punam.montra.src.presentation.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import com.punam.montra.src.domain.model.response.TransactionResponse
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.DateFormat
@@ -41,9 +40,8 @@ fun TransactionItem(item: TransactionResponse) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(9.dp)
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(item.category.icon),
-                contentDescription = null,
+            CachedImage(
+                url = item.category.icon,
                 contentScale = ContentScale.FillBounds,
                 colorFilter = ColorFilter.tint(item.category.color.toColor()),
                 modifier = Modifier
@@ -69,7 +67,9 @@ fun TransactionItem(item: TransactionResponse) {
                 Text(
                     text = item.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Column(
@@ -86,8 +86,8 @@ fun TransactionItem(item: TransactionResponse) {
                     color = if (pos) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                 )
                 Text(
-                    text = item.transactionAt.format(DateFormat.hhmma),
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = item.transactionAt.format(DateFormat.hhmmDDmmyy),
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
