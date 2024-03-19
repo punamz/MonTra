@@ -13,6 +13,7 @@ import com.punam.montra.src.presentation.onboard.OnboardView
 import com.punam.montra.src.presentation.select_category.SelectCategoryView
 import com.punam.montra.src.presentation.sign_up.SignUpView
 import com.punam.montra.src.presentation.splash.SplashView
+import com.punam.montra.src.presentation.transaction_detail.TransactionDetailView
 import com.punam.montra.util.AppConstant
 import com.punam.montra.util.Routers
 
@@ -42,9 +43,9 @@ fun NavigationGraph(
             LandingView(navController = navController)
         }
         composable(
-            route = Routers.SelectCategory.name + "/{${AppConstant.SelectCategoryArgKey}}",
+            route = Routers.SelectCategory.name + "/{${AppConstant.SELECT_CATEGORY_ARG_KEY}}",
             arguments = listOf(
-                navArgument(AppConstant.SelectCategoryArgKey) {
+                navArgument(AppConstant.SELECT_CATEGORY_ARG_KEY) {
                     type = NavType.StringType
                     defaultValue = null
                     nullable = true
@@ -52,6 +53,18 @@ fun NavigationGraph(
             )
         ) {
             SelectCategoryView(navController = navController)
+        }
+        composable(
+            route = Routers.TransactionDetail.name + "/{${AppConstant.TRANSACTION_DETAIL_ARG_KEY}}",
+            arguments = listOf(
+                navArgument(AppConstant.TRANSACTION_DETAIL_ARG_KEY) {
+                    type = NavType.StringType
+                    defaultValue = null
+                    nullable = true
+                }
+            )
+        ) {
+            TransactionDetailView(navController = navController)
         }
     }
 }

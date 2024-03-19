@@ -26,10 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.patrykandpatrick.vico.core.extension.setAll
 import com.punam.montra.R
-import com.punam.montra.util.AppConstant
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.OrderByType
 
@@ -42,7 +39,6 @@ fun FilterBottomSheet(
     onConfirm: (CategoryType?, OrderByType, List<String>) -> Unit,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    navController: NavController,
 ) {
 
     var categoryType by remember { mutableStateOf(lastCategoryType) }
@@ -60,13 +56,6 @@ fun FilterBottomSheet(
         categoryType = if (categoryType != newCategoryType) newCategoryType else null
     }
 
-    if (navController.currentBackStackEntry?.savedStateHandle?.contains(AppConstant.SelectCategoryArgKey) == true) {
-        val navBackData =
-            navController.currentBackStackEntry?.savedStateHandle?.get<List<String>>(
-                AppConstant.SelectCategoryArgKey
-            ) ?: emptyList()
-        categories.setAll(navBackData)
-    }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState

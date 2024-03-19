@@ -64,4 +64,9 @@
     <string name="choose_category">Choose Category</string>
     <string name="selected">%1$s Selected</string>
     <string name="apply">Apply</string>
+    <string name="detail_transaction">Detail Transaction</string>
+    <string name="remove_transaction_title">Remove this transaction?</string>
+    <string name="emove_transaction_description">Are you sure do you want to remove this transaction?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

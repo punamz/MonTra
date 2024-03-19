@@ -92,7 +92,10 @@ fun TransactionView(
                                     .padding(horizontal = 20.dp)
                                     .padding(bottom = 8.dp)
                             ) {
-                                TransactionItem(item = it)
+                                TransactionItem(
+                                    item = it,
+                                    navController
+                                )
                             }
                         }
                     PullRefreshIndicator(
@@ -124,7 +127,6 @@ fun TransactionView(
                             )
                         )
                     },
-                    navController = navController,
                 )
             }
         }

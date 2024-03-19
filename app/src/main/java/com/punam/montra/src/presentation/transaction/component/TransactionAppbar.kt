@@ -36,34 +36,9 @@ fun TransactionAppBar(
                 .fillMaxWidth()
                 .height(64.dp)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp),
-                        shape = RoundedCornerShape(40.dp)
-                    )
-                    .padding(start = 8.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "Month",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
             Icon(
                 imageVector = Icons.Rounded.FilterList,
                 contentDescription = null,

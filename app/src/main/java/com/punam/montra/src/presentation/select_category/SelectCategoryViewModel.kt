@@ -35,7 +35,7 @@ class SelectCategoryViewModel @Inject constructor(
     }
 
     private fun handleArg() {
-        val argument = savedStateHandle.get<String>(AppConstant.SelectCategoryArgKey)
+        val argument = savedStateHandle.get<String>(AppConstant.SELECT_CATEGORY_ARG_KEY)
         val type = object : TypeToken<List<String>>() {}.type
         val categoriesSelected = Gson().fromJson<List<String>>(argument, type)
         _state.value = _state.value.copy(

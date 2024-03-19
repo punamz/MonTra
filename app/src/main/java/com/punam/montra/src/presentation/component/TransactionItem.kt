@@ -1,6 +1,7 @@
 package com.punam.montra.src.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,19 +22,30 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.google.gson.Gson
 import com.punam.montra.src.domain.model.response.TransactionResponse
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.DateFormat
+import com.punam.montra.util.Routers
 import com.punam.montra.util.format
 import com.punam.montra.util.toColor
+import java.util.Base64
 
 @Composable
-fun TransactionItem(item: TransactionResponse) {
+fun TransactionItem(item: TransactionResponse, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp))
+            .clickable {
+                val arg = Gson().toJson(item)
+                val encoderArg = Base64
+                    .getUrlEncoder()
+                    .encodeToString(arg.toByteArray())
+                navController.navigate(Routers.TransactionDetail.name + "/$encoderArg")
+            }
             .padding(16.dp)
     ) {
         Row(

@@ -127,7 +127,7 @@ fun SelectCategoryView(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     navController.previousBackStackEntry?.savedStateHandle?.set(
-                                        AppConstant.SelectCategoryArgKey,
+                                        AppConstant.SELECT_CATEGORY_ARG_KEY,
                                         state.categoriesSelected
                                     )
                                     navController.popBackStack()

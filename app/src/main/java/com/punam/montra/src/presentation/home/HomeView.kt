@@ -131,7 +131,10 @@ fun HomeView(
                             .padding(horizontal = 20.dp)
                             .padding(bottom = 8.dp)
                     ) {
-                        TransactionItem(item)
+                        TransactionItem(
+                            item,
+                            navController
+                        )
                     }
                 }
             }
