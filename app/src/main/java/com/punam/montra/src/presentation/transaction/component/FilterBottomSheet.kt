@@ -1,5 +1,6 @@
 package com.punam.montra.src.presentation.transaction.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,29 +8,34 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.patrykandpatrick.vico.core.extension.setAll
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.punam.montra.R
-import com.punam.montra.util.AppConstant
+import com.punam.montra.src.presentation.select_category.SelectCategoryView
+import com.punam.montra.src.presentation.transaction.TransactionEvent
+import com.punam.montra.src.presentation.transaction.TransactionViewModel
 import com.punam.montra.util.CategoryType
 import com.punam.montra.util.OrderByType
 
@@ -42,13 +48,13 @@ fun FilterBottomSheet(
     onConfirm: (CategoryType?, OrderByType, List<String>) -> Unit,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    navController: NavController,
+    viewModel: TransactionViewModel = hiltViewModel(),
 ) {
-
+    val state = viewModel.state.value
+    val subSheetState = rememberModalBottomSheetState(true)
     var categoryType by remember { mutableStateOf(lastCategoryType) }
     var orderByType by remember { mutableStateOf(lastOrderByType) }
-    val categories = remember { mutableStateListOf<String>() }
-    categories.addAll(lastCategories)
+    val categories = remember { lastCategories.toMutableStateList() }
 
     fun resetData() {
         categoryType = null
@@ -60,13 +66,6 @@ fun FilterBottomSheet(
         categoryType = if (categoryType != newCategoryType) newCategoryType else null
     }
 
-    if (navController.currentBackStackEntry?.savedStateHandle?.contains(AppConstant.SelectCategoryArgKey) == true) {
-        val navBackData =
-            navController.currentBackStackEntry?.savedStateHandle?.get<List<String>>(
-                AppConstant.SelectCategoryArgKey
-            ) ?: emptyList()
-        categories.setAll(navBackData)
-    }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
@@ -169,41 +168,38 @@ fun FilterBottomSheet(
                     Box(modifier = Modifier.weight(1f))
                 }
             }
-            /// close this feature / find another way to handle it
-//            Text(
-//                text = stringResource(R.string.category),
-//                style = MaterialTheme.typography.titleMedium,
-//            )
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .clickable {
-//                        val arg = Gson().toJson(categories.toList())
-//                        navController.navigate(Routers.SelectCategory.name + "/$arg")
-//                    }
-//                    .padding(vertical = 16.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Text(
-//                    text = stringResource(R.string.choose_category),
-//                    style = MaterialTheme.typography.bodyMedium,
-//                )
-//                Row(
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = stringResource(R.string.selected, categories.size),
-//                        style = MaterialTheme.typography.labelMedium,
-//                    )
-//
-//                    Icon(
-//                        imageVector = Icons.Rounded.ChevronRight,
-//                        contentDescription = null,
-//                        tint = MaterialTheme.colorScheme.primary
-//                    )
-//                }
-//            }
+            Text(
+                text = stringResource(R.string.category),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { viewModel.onEvent(TransactionEvent.ToggleCategoryBottomSheet(true)) }
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.choose_category),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+
+                ) {
+                    Text(
+                        text = stringResource(R.string.selected, categories.size),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+
+                    Icon(
+                        imageVector = Icons.Rounded.ChevronRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
             Button(
                 onClick = {
                     onConfirm.invoke(categoryType, orderByType, categories.toList())
@@ -215,6 +211,26 @@ fun FilterBottomSheet(
                 Text(text = stringResource(R.string.apply))
             }
         }
+        if (state.showCategoryBottomSheet)
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewModel.onEvent(TransactionEvent.ToggleCategoryBottomSheet(false))
+                },
+                sheetState = subSheetState
+            ) {
+                SelectCategoryView(
+                    lastCategoriesSelected = categories,
+                    onConfirm = {
+                        categories.clear()
+                        categories.addAll(it)
+                    },
+                    onDismissRequest = {
+                        viewModel.onEvent(
+                            TransactionEvent.ToggleCategoryBottomSheet(false)
+                        )
+                    }
+                )
+            }
     }
 }
 

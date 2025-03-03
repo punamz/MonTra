@@ -104,7 +104,7 @@ fun TransactionView(
 
             }
 
-            if (state.showBottomSheet) {
+            if (state.showFilterBottomSheet) {
                 FilterBottomSheet(
                     onDismissRequest = {
                         viewModel.onEvent(
@@ -124,7 +124,7 @@ fun TransactionView(
                             )
                         )
                     },
-                    navController = navController,
+                    viewModel = viewModel,
                 )
             }
         }

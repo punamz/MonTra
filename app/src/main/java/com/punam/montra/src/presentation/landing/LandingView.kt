@@ -1,6 +1,10 @@
 package com.punam.montra.src.presentation.landing
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -41,7 +45,7 @@ fun LandingView(
             NavigationBar {
                 screens.forEach { screen ->
                     NavigationBarItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route.name } == true,
+                        selected = currentDestination?.hierarchy?.any { it.route == screen.route::class.qualifiedName } == true,
                         label = {
                             Text(stringResource(id = screen.label))
                         },
@@ -52,7 +56,7 @@ fun LandingView(
                             )
                         },
                         onClick = {
-                            bottomNavController.navigate(screen.route.name) {
+                            bottomNavController.navigate(screen.route) {
                                 popUpTo(bottomNavController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
@@ -63,18 +67,31 @@ fun LandingView(
                     )
                 }
             }
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        floatingActionButton = {
+            if (currentDestination?.hierarchy?.any { it.route == Routers.Profile::class.qualifiedName } == false) {
+                FloatingActionButton(
+                    onClick = {
+
+                    },
+                ) {
+                    Icon(imageVector = Icons.Filled.CameraAlt, contentDescription = "Add icon")
+                }
+            }
         }
+
     ) { paddingValues ->
         NavHost(
             bottomNavController,
-            startDestination = Routers.Home.name,
+            startDestination = Routers.Home,
             Modifier.padding(paddingValues)
         ) {
-            composable(Routers.Home.name) {
+            composable<Routers.Home> {
                 HomeView(
                     navController = navController,
                     changeToTransactionTab = {
-                        bottomNavController.navigate(Routers.Transaction.name) {
+                        bottomNavController.navigate(Routers.Transaction) {
                             popUpTo(bottomNavController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -83,7 +100,7 @@ fun LandingView(
                         }
                     },
                     changeToProfileTab = {
-                        bottomNavController.navigate(Routers.Profile.name) {
+                        bottomNavController.navigate(Routers.Profile) {
                             popUpTo(bottomNavController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -93,9 +110,9 @@ fun LandingView(
                     },
                 )
             }
-            composable(Routers.Transaction.name) { TransactionView(navController = navController) }
-            composable(Routers.Budget.name) { BudgetView(navController = navController) }
-            composable(Routers.Profile.name) { ProfileView(navController = navController) }
+            composable<Routers.Transaction> { TransactionView(navController = navController) }
+            composable<Routers.Budget> { BudgetView(navController = navController) }
+            composable<Routers.Profile> { ProfileView(navController = navController) }
         }
     }
 }

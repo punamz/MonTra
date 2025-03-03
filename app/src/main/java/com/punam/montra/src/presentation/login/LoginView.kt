@@ -81,7 +81,7 @@ fun LoginView(
                 is ViewState.Success -> {
                     viewModel.saveLocalData(event.value)
                     isLoading = false
-                    navController.navigate(Routers.Landing.name) {
+                    navController.navigate(Routers.Landing) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
                 }
@@ -181,7 +181,7 @@ fun LoginView(
                     text = stringResource(id = R.string.do_not_have_account),
                     color = MaterialTheme.colorScheme.inverseSurface
                 )
-                TextButton(onClick = { navController.navigate(Routers.SignUp.name) }) {
+                TextButton(onClick = { navController.navigate(Routers.SignUp) }) {
                     Text(
                         text = stringResource(id = R.string.sign_up),
                         style = MaterialTheme.typography.titleMedium,

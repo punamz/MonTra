@@ -21,8 +21,8 @@ class SplashViewModel @Inject constructor(
     private val _isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLoading: State<Boolean> = _isLoading
 
-    private val _startDestination: MutableState<String> = mutableStateOf(Routers.Splash.name)
-    val startDestination: State<String> = _startDestination
+    private val _startDestination: MutableState<Routers> = mutableStateOf(Routers.Splash)
+    val startDestination: State<Routers> = _startDestination
 
     init {
         viewModelScope.launch {
@@ -31,17 +31,17 @@ class SplashViewModel @Inject constructor(
                 default = false
             ).first()
             if (!isOnboardCompleted) {
-                _startDestination.value = Routers.Onboard.name
+                _startDestination.value = Routers.Onboard
                 _isLoading.value = false
             } else {
-                storeDatabase.readValue(
+                val userId = storeDatabase.readValue(
                     preferencesKey = PreferencesKey.userId,
                     default = ""
-                ).collect {
-                    _startDestination.value =
-                        if (it.isNotEmpty()) Routers.Landing.name else Routers.Login.name
-                    _isLoading.value = false
-                }
+                ).first()
+
+                _startDestination.value =
+                    if (userId.isNotEmpty()) Routers.Landing else Routers.Login
+                _isLoading.value = false
             }
         }
     }

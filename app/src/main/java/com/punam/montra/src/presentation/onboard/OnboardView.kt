@@ -63,7 +63,7 @@ fun OnboardView(
         Button(
             onClick = {
                 viewModel.saveOnBoardingState(completed = true)
-                navController.navigate(Routers.SignUp.name) {
+                navController.navigate(Routers.SignUp) {
                     popUpTo(navController.graph.id) { inclusive = true }
                 }
             },
@@ -74,7 +74,7 @@ fun OnboardView(
         ElevatedButton(
             onClick = {
                 viewModel.saveOnBoardingState(completed = true)
-                navController.navigate(Routers.Login.name) {
+                navController.navigate(Routers.Login) {
                     popUpTo(navController.graph.id) { inclusive = true }
                 }
             },
