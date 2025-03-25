@@ -1,5 +1,6 @@
 package com.punam.montra.src.presentation.select_category
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -30,26 +31,21 @@ class SelectCategoryViewModel @Inject constructor(
     private var canLoadMore = true
 
     init {
-        handleArg()
         getCategory()
-    }
-
-    private fun handleArg() {
-        val argument = savedStateHandle.get<String>(AppConstant.SelectCategoryArgKey)
-        val type = object : TypeToken<List<String>>() {}.type
-        val categoriesSelected = Gson().fromJson<List<String>>(argument, type)
-        _state.value = _state.value.copy(
-            categoriesSelected = categoriesSelected
-        )
     }
 
     fun onEvent(event: SelectCategoryEvent) {
         when (event) {
             SelectCategoryEvent.GetMore -> getMoreTransaction()
             SelectCategoryEvent.Refresh -> refreshData()
-            is SelectCategoryEvent.SelectCategory -> selectCategory(event.value)
-            is SelectCategoryEvent.UnselectCategory -> unselectCategory(event.value)
+              is SelectCategoryEvent.SetLastCategoriesSelected -> setLastCategoriesSelected(event.value)
         }
+    }
+
+    private fun setLastCategoriesSelected(value: List<String>) {
+        _state.value = _state.value.copy(
+            categoriesSelected = value
+        )
     }
 
     private fun refreshData() {
@@ -88,24 +84,6 @@ class SelectCategoryViewModel @Inject constructor(
             )
             if (result !is ViewState.Success) canLoadMore = false
         }
-    }
-
-    private fun unselectCategory(value: String) {
-        val categoriesSelected = _state.value.categoriesSelected.toMutableList().apply {
-            remove(value)
-        }
-        _state.value = _state.value.copy(
-            categoriesSelected = categoriesSelected
-        )
-    }
-
-    private fun selectCategory(value: String) {
-        val categoriesSelected = _state.value.categoriesSelected.toMutableList().apply {
-            add(value)
-        }
-        _state.value = _state.value.copy(
-            categoriesSelected = categoriesSelected
-        )
     }
 
 }

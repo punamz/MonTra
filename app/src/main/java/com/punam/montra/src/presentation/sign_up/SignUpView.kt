@@ -87,7 +87,7 @@ fun SignUpView(
                 is ViewState.Success -> {
                     viewModel.saveLocalData(event.value)
                     isLoading = false
-                    navController.navigate(Routers.Landing.name) {
+                    navController.navigate(Routers.Landing) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
                 }
@@ -201,7 +201,7 @@ fun SignUpView(
                 )
                 TextButton(onClick = {
                     if (canPop) navController.popBackStack()
-                    else navController.navigate(Routers.Login.name) {
+                    else navController.navigate(Routers.Login) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
                 }) {

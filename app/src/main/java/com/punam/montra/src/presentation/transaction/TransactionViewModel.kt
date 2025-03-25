@@ -40,6 +40,7 @@ class TransactionViewModel @Inject constructor(
                 event.orderByType,
                 event.categories
             )
+            is TransactionEvent.ToggleCategoryBottomSheet -> toggleCategoryBottomSheet(event.value)
         }
     }
 
@@ -101,7 +102,11 @@ class TransactionViewModel @Inject constructor(
 
     private fun toggleFilterBottomSheet(value: Boolean) {
         _state.value = _state.value.copy(
-            showBottomSheet = value
+            showFilterBottomSheet = value
+        )
+    }  private fun toggleCategoryBottomSheet(value: Boolean) {
+        _state.value = _state.value.copy(
+            showCategoryBottomSheet = value
         )
     }
 }
